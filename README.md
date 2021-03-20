@@ -1,4 +1,4 @@
-# CSC2006_IoT_LoRa_LoRaWAN
+# CSC2006 IoT Smart Dustbin 
 
 **Team Member**
 
