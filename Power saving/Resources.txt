@@ -1,0 +1,10 @@
+https://www.makeuseof.com/tag/arduino-power-saving-tips/
+
+
+LowPower.h
+https://github.com/rocketscream/Low-Power
+For reference
+https://circuitdigest.com/microcontroller-projects/arduino-sleep-modes-and-how-to-use-them-to-reduce-power-consumption
+
+Attaching interrupt
+https://roboticsbackend.com/arduino-interrupts/
