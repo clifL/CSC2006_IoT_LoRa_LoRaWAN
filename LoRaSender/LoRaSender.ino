@@ -1,5 +1,5 @@
 #include <SPI.h>
-#include <LoRa.h>
+#include <LoRa.h>  // reference to the LoRa library
 #include "LowPower.h"
 #include <dht.h>    //Include the DHT library for the temperature - humidity sensor
 #define TRIG_PIN 4  //Connect TRIG pin to digital pin 4
@@ -20,6 +20,19 @@ float dataset[3] = { };
 String sTemp = "";  
 String sHumidity = "";  
 String sFullness = "";
+
+/****************************************************************************************
+* Void setup()                                                                           *
+* Serial.begin() opens serial port, sets data rate to 9600 bps                           *
+* while(!Serial) waits for an active serial connection                                   *
+* initialize the LoRa radio on the shield with LoRa.begin()                              *
+* (915600000) represent the operating freq for SG                                        *
+* The syncwords used for public networks such as LoRaWAN\TTN are 0x34 for SX127x devices *
+* and 0x3444 for SX126x devices.                                                         *
+* SX127x devices are the Arduino Shield devices                                          *
+*                                                                                        *
+*                                                                                        *
+****************************************************************************************/
 
 void setup() {
   // Set up default build in led
@@ -45,6 +58,24 @@ void setup() {
   Serial.println("Program Began");
 
 }
+
+
+
+/***************************************************************************************
+* Voidloop function()                                                                    *
+* transmit the LoRa packet containing the sensor value using LoRa.beginPacket, LoRa.print*
+* and LoRa.endPacket                                                                     *
+*                                                                                        *
+* Program will first scan for any incoming packets, The loop continually attempts to     *
+* parse any LoRa packets. If a message is received, the packetSize will be returned.     *
+*                                                                                        *
+* Use LoRa.available and LoRa.read to read each character of the packet, printing them   *
+* to the Serial Monitor                                                                  *
+* BeginPacket() Start the sequence of sending a packet.                                  *
+* LoRa.print() Write data into the packet                                                *
+* endPacket() End the sequence of sending a packet.                                      *
+*                                                                                        *
+****************************************************************************************/
 
 void loop() {
   // Activate Low Power Mode
@@ -127,7 +158,7 @@ void loop() {
       LoRa.print(",1");
       LoRa.endPacket();
   }
-  
+  //debugging to view datastream on monitor screen to check data sent live
   if (debugMode) {
     Serial.println("##Data sent##");
     delay(100);

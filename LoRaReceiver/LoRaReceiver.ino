@@ -36,6 +36,20 @@ bool packetAvailable = false;
 // Reset function for cleanup
 void(* resetFunc) (void) = 0;
 
+
+/****************************************************************************************
+* Void setup()                                                                           *
+* Serial.begin() opens serial port, sets data rate to 9600 bps                           *
+* while(!Serial) waits for an active serial connection                                   *
+* initialize the LoRa radio on the shield with LoRa.begin()                              *
+* (915600000) represent the operating freq for SG                                        *
+* The syncwords used for public networks such as LoRaWAN\TTN are 0x34 for SX127x devices *
+* and 0x3444 for SX126x devices.                                                         *
+* SX127x devices are the Arduino Shield devices                                          *
+*                                                                                        *
+*                                                                                        *
+****************************************************************************************/
+
 void setup() {
   digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
 
@@ -50,6 +64,27 @@ void setup() {
   }
    LoRa.setSyncWord(0x34);
 }
+
+
+/***************************************************************************************
+* Voidloop function()                                                                    *                                                                                       
+* Program will first scan for any incoming packets, The loop continually attempts to     *
+* parse any LoRa packets. If a message is received, the packetSize will be returned.     *
+*                                                                                        *
+* Use LoRa.available and LoRa.read to read each character of the packet, printing them   *
+* to the Serial Monitor                                                                  *
+* LoRa.avaialble Returns number of bytes available for reading.                          *
+* LoRa.Read Read the next byte from the packet.                                          *
+*                                                                                        *
+*LoRa.packetRssi to print the Received Signal Strength Indicator (RSSI). RSSI is measured*
+* in dBm and is the received signal power in milliwatts. The closer the measurement is to*
+* 0, the better, indicating a strong signal.                                             *
+*                                                                                        *
+*                                                                                        *
+*                                                                                        *
+****************************************************************************************/
+
+
 
 void loop() {
   // Activate Low Power Mode
