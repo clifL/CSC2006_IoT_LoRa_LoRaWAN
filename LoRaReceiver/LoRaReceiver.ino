@@ -89,7 +89,6 @@ void loop() {
       // print RSSI of packet
       Serial.print("' with RSSI ");
       Serial.println(LoRa.packetRssi());
-    
       LoRa.end();
   
       // Delimit LoRa packets

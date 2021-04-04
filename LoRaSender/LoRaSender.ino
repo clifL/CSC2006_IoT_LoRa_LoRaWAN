@@ -10,10 +10,10 @@ dht DHT;            //Create a DHT object
 int counter = 0;
 char charMsg[100]={"\0"};
 
-// Constant 729W - 741W in Non-Low Power Mode
-// Constant 81W - 91W on Low Power Mode and constant 179W - 241W upon wake up and sending
+// Constant 189W - 596W (0.037A ~ 0.116A) in Non-Low Power Mode
+// Constant 107W - 122W (0.021A ~ 0.024A)  on LowPower.powerDown Mode and constant 327W - 596W (0.075A - 0.116A) upon wake up and processing
 
-bool lowPowerMode = true;
+bool lowPowerMode = false;
 bool debugMode = true;
 
 float dataset[3] = { }; 
@@ -32,7 +32,7 @@ void setup() {
   pinMode(ECHO_PIN, INPUT);                         //Set the ECHO pin to INPUT mode
   
   Serial.begin(9600);
-  delay(500);
+  delay(100);
   while (!Serial);
   
   // LoRa Configuration
@@ -130,16 +130,16 @@ void loop() {
   
   if (debugMode) {
     Serial.println("##Data sent##");
-    delay(200);
+    delay(100);
     for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charTemp[i]);
     Serial.print(",");
     for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charHumidity[i]);
     Serial.print(",");
     for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charFullness[i]);
     Serial.print(",1");
-    delay(200);
+    delay(100);
     Serial.println(" ");
-    delay(200);
+    delay(100);
   }
 }
 
