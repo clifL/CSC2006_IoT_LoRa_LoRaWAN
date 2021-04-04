@@ -22,7 +22,6 @@ char tem_1[8]={"\0"},hum_1[8]={"\0"}, full_1[8]={"\0"};
 char tem_2[8]={"\0"},hum_2[8]={"\0"}, full_2[8]={"\0"};
 char *node_id = "<1336133>";  //From LG01 via web Local Channel settings on MQTT.Please refer <> dataformat in here.
 uint8_t datasend[64];
-uint8_t relaydatasend[64];
 unsigned int count = 1;
 byte loraMsg[100];
 char charMsg[50]={"\0"};
@@ -122,13 +121,13 @@ void loop() {
       rf95.setSyncWord(0x34);
       // LoRaWAN - (Field 1,2,3 is from nearby node)
       writeRelayData();
-      SendData(true);
-    
+      SendData();
+
       // LoRaWAN - (Field 4,5,6 is from current node)
       // Get current node sensors data
       getInputs();
       writeData();
-      SendData(false);    
+      SendData();    
       packetAvailable = false;
       resetFunc();
     }
@@ -142,7 +141,7 @@ void loop() {
       getInputs();
       // LoRaWAN
       writeData();
-      SendData(false);
+      SendData();
       resetFunc();
     }
   }
@@ -161,7 +160,7 @@ void writeRelayData()
   strcat(data,hum_2);
   strcat(data,"&field3=");
   strcat(data,full_2);
-  strcpy((char *)relaydatasend,data);
+  strcpy((char *)datasend,data);
 }
 
 void writeData()
@@ -183,15 +182,10 @@ void writeData()
   strcpy((char *)datasend,data); 
 }
 
-void SendData(bool isRelay)
+void SendData()
 {
       Serial.println(F("Sending data to LG01"));
-      if (isRelay) {
-        rf95.send((char *)relaydatasend,sizeof(relaydatasend)); 
-      }
-      else {
-        rf95.send((char *)datasend,sizeof(datasend)); 
-      }
+      rf95.send((char *)datasend,sizeof(datasend));  
       rf95.waitPacketSent();  // Now wait for a reply
     
       uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
@@ -213,9 +207,7 @@ void SendData(bool isRelay)
   {
     Serial.println("No reply, is LoRa server running?");
   }
-  delay(2000);
-  LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF); //Deep sleep mode
-  LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF); //Deep sleep mode
+  delay(5000);
 }
 
 void getInputs() {

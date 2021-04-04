@@ -1,11 +1,8 @@
 #include <dht.h>    //Include the DHT library for the temperature - humidity sensor
-#define TRIG_PIN 12  //Connect TRIG pin to digital pin 4
-#define ECHO_PIN 13  //Connect ECHO pin to digital pin 5
+#define TRIG_PIN 9  //Connect TRIG pin to digital pin 4
+#define ECHO_PIN 10  //Connect ECHO pin to digital pin 5
 #define dht_apin A0 //Connect Signal pin from DHT11 sensor to analog pin A0
 dht DHT;            //Create a DHT object
-float dataset[3] = { }; 
-
-
 void setup() {
  pinMode(TRIG_PIN, OUTPUT);                        //Set the TRIG pin to OUTPUT mode
  pinMode(ECHO_PIN, INPUT);                         //Set the ECHO pin to INPUT mode  
@@ -14,25 +11,7 @@ void setup() {
  Serial.println("Accurate distance sensing\n\n");  //Write a welcoming message to serial monitor
  delay(1000);                                      //Wait before accessing the DHT11 Sensor
 }
-
 void loop() {
- getInputs();
- //Wait 2 seconds before accessing sensor again. 
- //Write results to serial monitor
- Serial.print("Obstacle distance = ");
- Serial.print(dataset[0]);
- Serial.print("cm  ");
- Serial.print("Current humidity = ");
- Serial.print(dataset[1]);
- Serial.print("%  ");
- Serial.print("temperature = ");
- Serial.print(dataset[2]); 
- Serial.print("C  ");
- Serial.println("");
- delay(2000);
-}
-
-void getInputs() {
  DHT.read11(dht_apin);           //Read the data from the DHT sensor
  float p = 101000;               //Set atmospheric pressure to 101.000 kPa
  float temp = DHT.temperature;   //Get temperature from sensor  
@@ -72,13 +51,25 @@ void getInputs() {
  float meters = seconds * speedOfSound;                //Get the distance in meters using the speed of sound calculated earlier
  float cm = meters * 100;                              //Convert meters to cm
  cm = cm/2;                                            //We only want the distance to the obstacle and not the roundtrip
- dataset[0] = cm;
- dataset[1] = humidity;
- dataset[2] = temp;
+ //Write results to serial monitor
+ Serial.print("Obstacle distance = ");
+ Serial.print(cm);
+ Serial.print("cm  ");
+ Serial.print("Current humidityy = ");
+ Serial.print(humidity);
+ Serial.print("%  ");
+ Serial.print("temperature = ");
+ Serial.print(temp); 
+ Serial.print("C  ");
+ Serial.print("Speed of Sound = ");
+ Serial.print(speedOfSound);
+ Serial.println("m/sec   ");
  if (cm <= 20){
   Serial.println("Bin Full, Please Clear Bin");
  }
  if (temp >= 50){
   Serial.println("Bin Temperature too High, Please Check");
  }
+ //Wait 2 seconds before accessing sensor again. 
+ delay(2000);
 }

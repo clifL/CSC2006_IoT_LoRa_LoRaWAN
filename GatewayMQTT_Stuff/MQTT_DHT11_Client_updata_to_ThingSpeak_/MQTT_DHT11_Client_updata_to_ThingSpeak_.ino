@@ -10,7 +10,7 @@ float frequency = 868.0;  //frequency settings
 float temperature,humidity,tem,hum;
 char tem_1[8]={"\0"},hum_1[8]={"\0"};
 char *node_id = "<1336133>";  //From LG01 via web Local Channel settings on MQTT.Please refer <> dataformat in here.
-uint8_t datasend[64];
+uint8_t datasend[36];
 unsigned int count = 1;
 
 void setup()
@@ -45,8 +45,8 @@ void dhtTem()
 }
 void dhtWrite()
 {
-    char data[64] = "\0";
-    for(int i = 0; i < 64; i++)
+    char data[50] = "\0";
+    for(int i = 0; i < 50; i++)
     {
        data[i] = node_id[i];
     }
@@ -56,19 +56,9 @@ void dhtWrite()
 
     // Serial.println(tem_1);
      strcat(data,"field1=");
-//     strcat(data,"90.0");
      strcat(data,tem_1);
      strcat(data,"&field2=");
      strcat(data,hum_1);
-//     strcat(data,"50.0");
-//     strcat(data,"&field3=");
-//     strcat(data,"100");
-//     strcat(data,"&field4=");
-//     strcat(data,"100");
-//     strcat(data,"&field5=");
-//     strcat(data,"100");
-//     strcat(data,"&field6=");
-//     strcat(data,"100");
      strcpy((char *)datasend,data);
      
    //Serial.println((char *)datasend);
