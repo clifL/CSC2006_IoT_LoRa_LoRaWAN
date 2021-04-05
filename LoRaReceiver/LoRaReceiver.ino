@@ -38,7 +38,7 @@ void(* resetFunc) (void) = 0;
 
 
 /****************************************************************************************
-* Void setup()                                                                           *
+* Void setup() CODE PASSED                                                               *
 * Serial.begin() opens serial port, sets data rate to 9600 bps                           *
 * while(!Serial) waits for an active serial connection                                   *
 * initialize the LoRa radio on the shield with LoRa.begin()                              *
@@ -67,7 +67,7 @@ void setup() {
 
 
 /***************************************************************************************
-* Voidloop function()                                                                    *                                                                                       
+* Voidloop function()                                                                    *                                                                                  
 * Program will first scan for any incoming packets, The loop continually attempts to     *
 * parse any LoRa packets. If a message is received, the packetSize will be returned.     *
 *                                                                                        *
@@ -80,8 +80,12 @@ void setup() {
 * in dBm and is the received signal power in milliwatts. The closer the measurement is to*
 * 0, the better, indicating a strong signal.                                             *
 *                                                                                        *
-*                                                                                        *
-*                                                                                        *
+* Enable LoRaWAN communication                                                           *
+* Setting up Frequency to allow range value of 868MHZ                                    *
+* Setting up rf95 module transmitter powers from 5 to 13dBm                              *
+* Enable rf95 module to send data in ultra-long range spread spectrum communication      *
+* to nodes within frequency range                                                        *
+* If not within frequency Range abort sending of data                                    *
 ****************************************************************************************/
 
 
@@ -252,6 +256,22 @@ void SendData(bool isRelay)
   LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF); //Deep sleep mode
   LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF); //Deep sleep mode
 }
+
+/****************************************************************************************
+* Void getInputs() CODE PASSED                                                           *
+* Setting up input pin A0 to retrieve sensor values                                      *
+* Retrieving Temperature and Humidity readings from pin A0                               *
+* Essential Float variables created to calculate the speed of sound to identify          *
+* every 10 Microseconds ultrasonic burst                                                 *
+*                                                                                        *
+* float fullLevel()                                                                      *
+* Algorithm checks to calculate Bin level with benchmark set at 15cm for the height of   *
+* dustbin                                                                                *
+* If float return detect dustbin level to be more than 80% full, alert user to clear the *
+* dustbin                                                                                *
+****************************************************************************************/
+
+
 
 void getInputs() {
  DHT.read11(dht_apin);           //Read the data from the DHT sensor

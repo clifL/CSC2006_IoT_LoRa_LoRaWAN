@@ -22,7 +22,7 @@ String sHumidity = "";
 String sFullness = "";
 
 /****************************************************************************************
-* Void setup()                                                                           *
+* Void setup() Code PASSED                                                               *
 * Serial.begin() opens serial port, sets data rate to 9600 bps                           *
 * while(!Serial) waits for an active serial connection                                   *
 * initialize the LoRa radio on the shield with LoRa.begin()                              *
@@ -70,11 +70,13 @@ void setup() {
 * parse any LoRa packets. If a message is received, the packetSize will be returned.     *
 *                                                                                        *
 * Use LoRa.available and LoRa.read to read each character of the packet, printing them   *
-* to the Serial Monitor                                                                  *
+* to the Serial Monitor                                                                  *                                                             
 * BeginPacket() Start the sequence of sending a packet.                                  *
 * LoRa.print() Write data into the packet                                                *
 * endPacket() End the sequence of sending a packet.                                      *
 *                                                                                        *
+* Set checks for debug by Printing live input sensor values on serial monitor screen     *
+* every 100microseconds to ensure that live data is accurately recieved                  *
 ****************************************************************************************/
 
 void loop() {
@@ -173,6 +175,22 @@ void loop() {
     delay(100);
   }
 }
+
+
+/****************************************************************************************
+* Void getInputs() CODE PASSED                                                           *
+* Setting up input pin A0 to retrieve sensor values                                      *
+* Retrieving Temperature and Humidity readings from pin A0                               *
+* Essential Float variables created to calculate the speed of sound to identify          *
+* every 10 Microseconds ultrasonic burst                                                 *
+*                                                                                        *
+* float fullLevel()                                                                      *
+* Algorithm checks to calculate Bin level with benchmark set at 15cm for the height of   *
+* dustbin                                                                                *
+* If float return detect dustbin level to be more than 80% full, alert user to clear the *
+* dustbin                                                                                *
+****************************************************************************************/
+
 
 void getInputs() {
  DHT.read11(dht_apin);           //Read the data from the DHT sensor
