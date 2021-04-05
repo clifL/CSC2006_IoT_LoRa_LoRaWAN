@@ -53,7 +53,7 @@ void setup() {
     Serial.println("Starting LoRa failed!");
     while (1);
   }
-  LoRa.setSyncWord(0x34);
+  LoRa.setSyncWord(0x12);
 
   Serial.println("Program Began");
 
