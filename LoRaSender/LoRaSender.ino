@@ -13,7 +13,7 @@ char charMsg[100]={"\0"};
 // Constant 189W - 596W (0.037A ~ 0.116A) in Non-Low Power Mode
 // Constant 107W - 122W (0.021A ~ 0.024A)  on LowPower.powerDown Mode and constant 327W - 596W (0.075A - 0.116A) upon wake up and processing
 
-bool lowPowerMode = false;
+bool lowPowerMode = true;
 bool debugMode = true;
 
 float dataset[3] = { }; 
@@ -125,54 +125,56 @@ void loop() {
   // Call getInput()s to get Ultrasonic, Temperature and Humidity data
   getInputs();
 
-  // Initialise
-  String sHumidity = "";
-  String sFullness = "";
-  String sTemp = "";
-
-  // Conversion Temperature
-  sTemp+=String(int(dataset[2]));
-  //+ "."+String(getDecimal(dataset[2])); //combining both whole and decimal part in string with a fullstop between them
-  char charTemp[sTemp.length()+1];                      //initialise character array to store the values
-  sTemp.toCharArray(charTemp,sTemp.length()+1);     //passing the value of the string to the character array
-
-
-  // Conversion Humidity
-  sHumidity+=String(int(dataset[1]));
-  //+ "."+String(getDecimal(dataset[1])); //combining both whole and decimal part in string with a fullstop between them
-  char charHumidity[sHumidity.length()+1];                      //initialise character array to store the values
-  sHumidity.toCharArray(charHumidity,sHumidity.length()+1);     //passing the value of the string to the character array
-
-  // Conversion Ultrasonic
-  sFullness+=String(int(dataset[0]));
-  //+ "."+String(getDecimal(dataset[0])); //combining both whole and decimal part in string with a fullstop between them
-  char charFullness[sFullness.length()+1];                      //initialise character array to store the values
-  sFullness.toCharArray(charFullness,sFullness.length()+1);     //passing the value of the string to the character array
-
-  // Send message 5 times to nearby node
-  for (int q = 0; q < 5; q++) {
-      LoRa.beginPacket();
-      LoRa.print(charTemp);
-      LoRa.print(",");
-      LoRa.print(charHumidity);
-      LoRa.print(",");
-      LoRa.print(charFullness);
-      LoRa.print(",1");
-      LoRa.endPacket();
-  }
-  //debugging to view datastream on monitor screen to check data sent live
-  if (debugMode) {
-    Serial.println("##Data sent##");
-    delay(100);
-    for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charTemp[i]);
-    Serial.print(",");
-    for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charHumidity[i]);
-    Serial.print(",");
-    for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charFullness[i]);
-    Serial.print(",1");
-    delay(100);
-    Serial.println(" ");
-    delay(100);
+  if (dataset[2] != -999.00) {
+    // Initialise
+    String sHumidity = "";
+    String sFullness = "";
+    String sTemp = "";
+  
+    // Conversion Temperature
+    sTemp+=String(int(dataset[2]));
+    //+ "."+String(getDecimal(dataset[2])); //combining both whole and decimal part in string with a fullstop between them
+    char charTemp[sTemp.length()+1];                      //initialise character array to store the values
+    sTemp.toCharArray(charTemp,sTemp.length()+1);     //passing the value of the string to the character array
+  
+  
+    // Conversion Humidity
+    sHumidity+=String(int(dataset[1]));
+    //+ "."+String(getDecimal(dataset[1])); //combining both whole and decimal part in string with a fullstop between them
+    char charHumidity[sHumidity.length()+1];                      //initialise character array to store the values
+    sHumidity.toCharArray(charHumidity,sHumidity.length()+1);     //passing the value of the string to the character array
+  
+    // Conversion Ultrasonic
+    sFullness+=String(int(dataset[0]));
+    //+ "."+String(getDecimal(dataset[0])); //combining both whole and decimal part in string with a fullstop between them
+    char charFullness[sFullness.length()+1];                      //initialise character array to store the values
+    sFullness.toCharArray(charFullness,sFullness.length()+1);     //passing the value of the string to the character array
+  
+    // Send message 5 times to nearby node
+    for (int q = 0; q < 5; q++) {
+        LoRa.beginPacket();
+        LoRa.print(charTemp);
+        LoRa.print(",");
+        LoRa.print(charHumidity);
+        LoRa.print(",");
+        LoRa.print(charFullness);
+        LoRa.print(",1");
+        LoRa.endPacket();
+    }
+    //debugging to view datastream on monitor screen to check data sent live
+    if (debugMode) {
+      Serial.println("##Data sent##");
+      delay(100);
+      for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charTemp[i]);
+      Serial.print(",");
+      for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charHumidity[i]);
+      Serial.print(",");
+      for(uint8_t i=0; i<sizeof(charTemp);i++) Serial.print(charFullness[i]);
+      Serial.print(",1");
+      delay(100);
+      Serial.println(" ");
+      delay(100);
+    }
   }
 }
 
@@ -235,12 +237,6 @@ void getInputs() {
  dataset[0] = fullLevel(cm);
  dataset[1] = humidity;
  dataset[2] = temp;
- if (cm <= 20){
-  Serial.println("Bin Full, Please Clear Bin");
- }
- if (temp >= 50){
-  Serial.println("Bin Temperature too High, Please Check");
- }
 }
 
 float fullLevel (float cm){
@@ -249,9 +245,6 @@ float fullLevel (float cm){
     cm = full;
   }
   float fullness = ((full - cm) / full) * 100;
-  if (fullness >= 0.8){
-    Serial.println("Bin Full, Please Clear Bin");
-  }
   return fullness;
 }
 
