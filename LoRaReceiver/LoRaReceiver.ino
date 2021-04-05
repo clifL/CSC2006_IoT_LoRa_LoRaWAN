@@ -9,9 +9,6 @@
 #define dht_apin A0 //Connect Signal pin from DHT11 sensor to analog pin A0
 dht DHT;            //Create a DHT object
 
-// Constant 241 to 311W in Non-Low Power Mode
-// Constant 176W to 311W in Low Power Mode
-
 // Singleton instance of the radio driver
 RH_RF95 rf95;
 float frequency = 868.0;  //frequency settings
@@ -62,7 +59,7 @@ void setup() {
     Serial.println("Starting LoRa failed!");
     while (1);
   }
-   LoRa.setSyncWord(0x34);
+   LoRa.setSyncWord(0x12);
 }
 
 
@@ -165,9 +162,12 @@ void loop() {
     
       // LoRaWAN - (Field 4,5,6 is from current node)
       // Get current node sensors data
+      delay(2000);
       getInputs();
-      writeData();
-      SendData(false);    
+      if (tem != -999.00) {
+        writeData();
+        SendData(false);    
+      }
       packetAvailable = false;
       resetFunc();
     }
@@ -180,8 +180,10 @@ void loop() {
       rf95.setSyncWord(0x34);
       getInputs();
       // LoRaWAN
-      writeData();
-      SendData(false);
+      if (tem != -999.00) {
+        writeData();
+        SendData(false);    
+      }
       resetFunc();
     }
   }
