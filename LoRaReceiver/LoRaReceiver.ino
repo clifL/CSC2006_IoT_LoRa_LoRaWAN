@@ -24,8 +24,8 @@ unsigned int count = 1;
 byte loraMsg[100];
 char charMsg[50]={"\0"};
 
-// Constant 226W (0.045A) at low power mode and 311W (0.062A) upon wakeup and processing with spikes of 400W+.
-// Constant 311W - 336W (0.062A ~ 0.067A) at Non-Low Power Mode with spikes of 400W+.
+// Constant 0.045A at low power mode and 0.062A upon wakeup and processing.
+// Constant 0.062A ~ 0.067A at Non-Low Power Mode.
 
 bool lowPowerMode = true;
 bool packetAvailable = false;

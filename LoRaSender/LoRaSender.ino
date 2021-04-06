@@ -10,8 +10,8 @@ dht DHT;            //Create a DHT object
 int counter = 0;
 char charMsg[100]={"\0"};
 
-// Constant 189W - 596W (0.037A ~ 0.116A) in Non-Low Power Mode
-// Constant 107W - 122W (0.021A ~ 0.024A)  on LowPower.powerDown Mode and constant 327W - 596W (0.075A - 0.116A) upon wake up and processing
+// Constant 0.037A ~ 0.116A in Non-Low Power Mode
+// Constant 0.021A ~ 0.024A  on LowPower.powerDown Mode and constant 0.075A - 0.116A upon wake up and processing
 
 bool lowPowerMode = true;
 bool debugMode = true;
